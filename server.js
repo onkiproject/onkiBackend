@@ -65,7 +65,7 @@ app.engine('ejs', async (filePath, options, callback) => {
     }
 });
 
-// 라우트 예시...
+// 라우트 예시..
 app.get('/', (req, res) => {
     res.render('index', { title: '원격 템플릿 테스트' });
 });
