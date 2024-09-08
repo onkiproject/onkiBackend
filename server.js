@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const sha = require('sha256');
+const sha = require('js-sha256').sha256;
 const ejs = require('ejs');
 
 let session = require('express-session');
