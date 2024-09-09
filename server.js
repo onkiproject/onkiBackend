@@ -36,14 +36,6 @@ mongoclient.connect(url)
     });
 
 
-// 서버 시작 부분을 분리하여 mongoDB와 연결이 되지 않아도 항상 실행되도록 함. (현재 필요 없음)
-// app.listen(port, function(){
-//     console.log(`서버가 포트 ${port}에서 실행 중입니다.`);
-// }).on('error', function(err){
-//     console.log("서버 시작 오류:", err);
-// });
-
-
 // 원격 템플릿 로더 함수 1
 // async function remoteTemplateLoader(templateName) {
 //     const githubRawUrl = `https://raw.githubusercontent.com/onkiproject/onkiFrontend/master/roots/${templateName}.ejs`;
@@ -95,7 +87,7 @@ app.engine('ejs', async (filePath, options, callback) => {
     }
 });
 
-// 라우트 예시..
+// 라우트 
 app.get('/newdiary', (req, res) => {
     res.render('newdiary1', { title: '새 일기 작성' });
 });
