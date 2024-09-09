@@ -24,7 +24,7 @@ let mydb;
 const url = "mongodb+srv://onki24:onki2004@onki-01.abw1d.mongodb.net/?retryWrites=true&w=majority&appName=onki-01"; 
 
 
-//mongodb와 연동, 서버 띄우기 (이 부분에 문제가 있는 듯..)
+//mongodb와 연동, 서버 띄우기 
 mongoclient.connect(url)
     .then(client => {
         mydb = client.db('onki');
@@ -44,7 +44,7 @@ mongoclient.connect(url)
 // });
 
 
-// 원격 템플릿 로더 함수
+// 원격 템플릿 로더 함수 1
 // async function remoteTemplateLoader(templateName) {
 //     const githubRawUrl = `https://raw.githubusercontent.com/onkiproject/onkiFrontend/master/roots/${templateName}.ejs`;
 //     try {
@@ -56,25 +56,22 @@ mongoclient.connect(url)
 //     }
 // }
 
+
+//원격 템플릿 로더 함수 2
 async function remoteTemplateLoader(templateName) {
     const githubRawUrl = `https://raw.githubusercontent.com/onkiproject/onkiFrontend/master/roots/${templateName}.ejs`;
+    console.log(`템플릿 URL: ${githubRawUrl}`);
     try {
         const response = await axios.get(githubRawUrl, { timeout: 5000 });
-
         if (response.status === 200) {
+            console.log('템플릿 로딩 성공');
             return response.data;
         } else {
             console.error(`템플릿 로딩 실패. 상태 코드: ${response.status}`);
             return null;
         }
     } catch (error) {
-        if (error.response) {
-            console.error(`템플릿 로딩 오류. 상태 코드: ${error.response.status}, 메시지: ${error.message}`);
-        } else if (error.request) {
-            console.error('요청은 전송되었지만, 응답이 없습니다.', error.request);
-        } else {
-            console.error(`템플릿 로딩 중 오류 발생: ${error.message}`);
-        }
+        console.error(`템플릿 로딩 오류: ${error.message}`);
         return null;
     }
 }
@@ -83,12 +80,15 @@ async function remoteTemplateLoader(templateName) {
 app.engine('ejs', async (filePath, options, callback) => {
     try {
         const templateName = filePath.split('/').pop().split('.')[0];
+        console.log(`Loading template: ${templateName}`);
+
         const template = await remoteTemplateLoader(templateName);
+
         if (template) {
             const rendered = ejs.render(template, options);
             return callback(null, rendered);
         } else {
-        return callback(new Error('템플릿을 로드할 수 없습니다.'));
+            return callback(new Error('템플릿을 로드할 수 없습니다.'));
         }
     } catch (error) {
         return callback(error);
